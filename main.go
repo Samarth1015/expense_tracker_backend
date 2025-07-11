@@ -18,6 +18,24 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// func CORSMiddleware() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*") // or your frontend domain
+// 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+// 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+// 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+// 		c.Writer.Header().Set("Access-Control-Expose-Headers", "expense_token")
+
+// 		// Handle preflight
+// 		if c.Request.Method == "OPTIONS" {
+// 			c.AbortWithStatus(204)
+// 			return
+// 		}
+
+// 		c.Next()
+// 	}
+// }
+
 func main() {
 
 	db := postgres.Db
@@ -31,6 +49,7 @@ func main() {
 	loging.InitialiseLogger()
 
 	router := gin.Default()
+	// router.Use(CORSMiddleware())
 	router.Use(middleware.CORSMiddleware())
 	r := router.Group("/api")
 

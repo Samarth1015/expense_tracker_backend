@@ -1,11 +1,12 @@
 package authcontroller
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
+	loging "github.com/Samarth1015/expense/Loging"
 	jwttoken "github.com/Samarth1015/expense/dto/jwtToken"
 	"github.com/Samarth1015/expense/model"
 	"github.com/Samarth1015/expense/postgres"
@@ -27,11 +28,20 @@ func Login(c *gin.Context) {
 	// fmt.Print("inside login ")
 	c.BindJSON(&body)
 	var user model.User
+	if !strings.HasPrefix(body.UserId, "user_") {
+		loging.Logger.Error("Invalid User_id")
+		c.Status(http.StatusBadRequest)
+
+		c.Abort()
+		return
+
+	}
 	c.Header("Content-Type", "application/json")
-	fmt.Println("------>calling how many timeL", body.Email)
+	// fmt.Println("------>calling how many timeL", body.Email)
 	result := postgres.Db.First(&user, "id=?", body.UserId)
 	// log.Print("-------->", result.Error.Error())
 	if result.Error != nil {
+
 		newUser := model.User{ID: body.UserId, Email: body.Email, Role: body.Role, UserName: body.Username, CreatedAt: time.Now()}
 		createResult := postgres.Db.Create(&newUser)
 		if createResult.Error != nil {
@@ -45,6 +55,11 @@ func Login(c *gin.Context) {
 			c.IndentedJSON(http.StatusInternalServerError, "error in creating token ")
 			return
 		}
+		if err := service.SendMail(body.Email); err != nil {
+			loging.Logger.Warn("err", err)
+			c.Abort()
+		}
+		c.Header("Access-Control-Expose-Headers", "expense_token")
 		c.Header("expense_token", token)
 
 		c.Status(http.StatusCreated)
@@ -59,6 +74,7 @@ func Login(c *gin.Context) {
 		return
 
 	}
+	c.Header("Access-Control-Expose-Headers", "expense_token")
 	c.Header("expense_token", token)
 	c.Status(http.StatusAccepted)
 

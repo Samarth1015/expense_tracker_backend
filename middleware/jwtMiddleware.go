@@ -16,7 +16,7 @@ import (
 
 func JwtVerify() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("------------------------------calling")
+		// fmt.Println("------------------------------calling")
 		authHeader := c.GetHeader("Authorization")
 
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {

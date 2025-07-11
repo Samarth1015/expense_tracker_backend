@@ -16,6 +16,6 @@ func PromptRoute(router *gin.RouterGroup) {
 		c.IndentedJSON(200, map[string]string{"msg": "pinging"})
 	})
 
-	r.POST("/", protectedcontroller.PromptController)
+	r.POST("", protectedcontroller.PromptController)
 
 }

@@ -31,7 +31,9 @@ func AddExpense(c *gin.Context) {
 			return
 		}
 		data = append(data, &model.Expense{
+
 			Amount:      float64(j.Amount),
+			Category:    j.Category,
 			Description: j.Description,
 			UserID:      claims.ID,
 			Date:        parsedDate,

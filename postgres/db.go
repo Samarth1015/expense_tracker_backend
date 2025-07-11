@@ -46,8 +46,8 @@ var (
 
 func init() {
 	// Read settings from env vars so you can change them in Kubernetes
-	host := getEnv("DB_HOST", "postgres-service")
-	port := getEnv("DB_PORT", "5432")
+	host := getEnv("DB_HOST", "localhost")
+	port := getEnv("DB_PORT", "5050")
 	user := getEnv("DB_USER", "postgres")
 	password := getEnv("DB_PASSWORD", "example")
 	dbname := getEnv("DB_NAME", "expense")

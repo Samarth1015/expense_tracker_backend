@@ -25,6 +25,7 @@ type Expense struct {
 	Date        time.Time `gorm:"not null" json:"date"`
 	Amount      float64   `gorm:"not null" json:"amount"`
 	Description string    `gorm:"type:text" json:"description"`
+	Category    string    `gorm:"type:varchar(100);not null" json:"category"`
 	UserID      string    `gorm:"not null" json:"user_id"`
 	User        User      `gorm:"foreignKey:UserID;references:ID" json:"-"`
 }
